@@ -1,4 +1,4 @@
-# xee-snmp-simulator
+# xee-snmp-simulator [![Circle CI](https://circleci.com/gh/xeemetric/xee-snmp-simulator/tree/master.svg?style=svg)](https://circleci.com/gh/xeemetric/xee-snmp-simulator/tree/master)
 
 SNMP Simulator is a simple tool to simulate an SNMP agent based on its SNMP walk file.
 
