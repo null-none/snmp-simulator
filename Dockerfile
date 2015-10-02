@@ -1,6 +1,6 @@
 FROM python:2.7
 
-MAINTAINER Dmitry Korobitsin <korobicin@gmail.com>
+MAINTAINER Dmitry Korobitsin <https://github.com/korobitsin>
 
 ENV SIMULATOR_VERSION 0.5.1
 
@@ -8,9 +8,9 @@ COPY . /tmp/simulator/
 
 RUN set -x \
     && pip install /tmp/simulator \
-    && mv /tmp/simulator/cisco_2801.conf / \
+    && mv /tmp/simulator/tests/cisco_2801.walk / \
     && rm -rf /tmp/simulator
 
 EXPOSE 161
 
-CMD ["simulator", "-s", "--host", "0.0.0.0", "--port", "161", "--walk_file", "cisco_2801.conf"]
+CMD ["simulator", "-s", "--host", "0.0.0.0", "--port", "161", "--walk_file", "cisco_2801.walk"]

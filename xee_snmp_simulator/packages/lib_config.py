@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 """
     lib_config
-    ~~~~~~~~~~~~~~~~
+    ~~~~~~~~~~
     CLI utility
     :copyright: (c) 2014-2015 Dmitry Korobitsin <https://github.com/korobitsin>
     :license: BSD, see LICENSE
