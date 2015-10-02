@@ -9,8 +9,12 @@
 import unittest
 import asyncore
 import time
+import os
 from pysnmp.entity.rfc3413.oneliner import cmdgen
 from xee_snmp_simulator import Simulator
+
+
+WALK_FILE = os.path.abspath(os.path.join(os.path.dirname(__file__), 'cisco_2801.walk'))
 
 
 class TestSimulator(unittest.TestCase):
@@ -21,10 +25,10 @@ class TestSimulator(unittest.TestCase):
         pass
 
     def test_add_walk_file(self):
-        self.simulator.add_walkfile('cisco_2801.walk')
+        self.simulator.add_walkfile(WALK_FILE)
 
     def test_snmp_get(self):
-        self.simulator.add_walkfile('cisco_2801.walk')
+        self.simulator.add_walkfile(WALK_FILE)
 
         def cbFun(sendRequestHandle, errorIndication, errorStatus, errorIndex, varBinds, cbCtx):
             if errorIndication or errorStatus:
