@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 """
     xee_snmp_simulator.simulator
-    ~~~~~~~~~~~~~~~~
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     SNMP Simulator
     :copyright: (c) 2014-2015 Dmitry Korobitsin <https://github.com/korobitsin>
     :license: BSD, see LICENSE
@@ -22,7 +22,7 @@ from xee_snmp_simulator.packages.lib_config import getConfig
 log = logging.getLogger('simulator')
 conf = getConfig('simulator')
 
-typeMap = {
+TYPE_MAP = {
     'STRING': v2c.OctetString,
     'INTEGER': v2c.Integer32,
     'IpAddress': v2c.IpAddress,
@@ -40,24 +40,26 @@ def createVariable(SuperClass, getValue, *args):
     class Var(SuperClass):
         def getValue(self, name, idx):
             oid_value, oid_type_str = getValue(name, idx)
-            return self.getSyntax().clone(typeMap[oid_type_str](oid_value))
+            return self.getSyntax().clone(TYPE_MAP[oid_type_str](oid_value))
     return Var(*args)
 
 
 class SNMPAgent(object):
-    def __init__(self, host='127.0.0.1', port=161, community='public'):
-        snmpEngine = engine.SnmpEngine()
-        config.addSocketTransport(snmpEngine, udp.domainName, udp.UdpTransport().openServerMode((host, port)))
-        config.addV1System(snmpEngine, 'my-area', community)
-        config.addVacmUser(snmpEngine, 2, 'my-area', 'noAuthNoPriv', (1, 3, 6))
-        snmpContext = context.SnmpContext(snmpEngine)
-        mibBuilder = snmpContext.getMibInstrum().getMibBuilder()
-        self.MibScalar, self.MibScalarInstance = mibBuilder.importSymbols('SNMPv2-SMI', 'MibScalar', 'MibScalarInstance')
-        self.snmpEngine, self.snmpContext, self.mibBuilder = snmpEngine, snmpContext, mibBuilder
+    def __init__(self, host, port, rcommunity):
+        self.snmpEngine = engine.SnmpEngine()
+        config.addSocketTransport(self.snmpEngine, udp.domainName, udp.UdpTransport().openServerMode((host, port)))
+        config.addV1System(self.snmpEngine, 'my-area', rcommunity)
+        config.addVacmUser(self.snmpEngine, 2, 'my-area', 'noAuthNoPriv', (1, 3, 6))
+        self.snmpContext = context.SnmpContext(self.snmpEngine)
+        self.mibBuilder = self.snmpContext.getMibInstrum().getMibBuilder()
+        self.MibScalar, self.MibScalarInstance = self.mibBuilder.importSymbols('SNMPv2-SMI', 'MibScalar', 'MibScalarInstance')
+        cmdrsp.GetCommandResponder(self.snmpEngine, self.snmpContext)
+        cmdrsp.NextCommandResponder(self.snmpEngine, self.snmpContext)
+        cmdrsp.BulkCommandResponder(self.snmpEngine, self.snmpContext)
 
     def add_oid(self, oid, oid_type_str, getValue):
         oid_num = rfc1902.ObjectName(oid).asTuple()
-        oid_type = typeMap[oid_type_str]
+        oid_type = TYPE_MAP[oid_type_str]
         self.mibBuilder.exportSymbols(
             '__MY_MIB',
             self.MibScalar(oid_num[:-1], oid_type),
@@ -65,9 +67,6 @@ class SNMPAgent(object):
         )
 
     def serve_forever(self):
-        cmdrsp.GetCommandResponder(self.snmpEngine, self.snmpContext)
-        cmdrsp.NextCommandResponder(self.snmpEngine, self.snmpContext)
-        cmdrsp.BulkCommandResponder(self.snmpEngine, self.snmpContext)
         self.snmpEngine.transportDispatcher.jobStarted(1)
 
         try:
@@ -77,11 +76,10 @@ class SNMPAgent(object):
 
 
 class Simulator(object):
-    def __init__(self):
+    def __init__(self, host, port, rcommunity):
         self.start_time = time.time()
-        self.oid_tree = {}
         self.oid_dict = {}
-        self.snmp_agent = SNMPAgent(host=conf.host, port=conf.port, community=conf.rcommunity)
+        self.snmp_agent = SNMPAgent(host=host, port=port, rcommunity=rcommunity)
 
     def add_walkfile(self, path):
         log.info('loading SNMP walk file {}'.format(path))
@@ -124,7 +122,7 @@ class Simulator(object):
                     'type': oid_type,
                     'value': oid_value,
                 })
-            except Exception:
+            except:
                 log.debug('invalid line=%s' % line)
         log.info('loading SNMP walk file {} done!'.format(path))
 
@@ -135,10 +133,14 @@ class Simulator(object):
     def get_value(self, name, oid_):
         oid = '.'.join([str(i) for i in name])
         oid_value, oid_type_str = self.oid_dict.get(oid, {}).get('value', 'Unknown value'), self.oid_dict.get(oid, {}).get('type', 'STRING')
-        if oid == '1.3.6.1.2.1.1.3.0':  # sysUptime override
-            oid_value = int(time.time() - self.start_time)
+        if oid == '1.3.6.1.2.1.1.3.0':
+            oid_value = self.sysuptime()
         log.debug('get %s [%s] %s %s' % (oid, oid_, oid_type_str, oid_value))
         return oid_value, oid_type_str
+
+    def sysuptime(self):
+        # MIB2::sysUptime
+        return int(time.time() - self.start_time)
 
 
 def main():
@@ -149,7 +151,7 @@ def main():
     conf.add_option(name='rcommunity', default='public')
     conf.add_option(name='wcommunity', default='private')
     conf.setup(parse_cfg=False, pid=False)
-    simulator = Simulator()
+    simulator = Simulator(host=conf.host, port=conf.port, rcommunity=conf.rcommunity)
     simulator.add_walkfile(conf.walk_file)
     simulator.snmp_agent.serve_forever()
 
