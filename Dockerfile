@@ -2,8 +2,6 @@ FROM python:2.7
 
 MAINTAINER Dmitry Korobitsin <https://github.com/korobitsin>
 
-ENV SIMULATOR_VERSION 0.5.1
-
 COPY . /tmp/simulator/
 
 RUN set -x \
@@ -13,4 +11,4 @@ RUN set -x \
 
 EXPOSE 161
 
-CMD ["simulator", "-s", "--host", "0.0.0.0", "--port", "161", "--walk_file", "cisco_2801.walk"]
+CMD ["snmp-simulator", "-s", "--host", "0.0.0.0", "--port", "161", "--walk_file", "cisco_2801.walk"]

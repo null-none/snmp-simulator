@@ -1,17 +1,17 @@
 from setuptools import setup
 
 setup(
-    name='xee-snmp-simulator',
-    description='XeeMetric SNMP Simulator',
-    version='0.5.2',
+    name='snmp-simulator',
+    description='A simple SNMP Simulator driven by agent\'s snmpwalk',
+    version='0.6.0',
     author='Dmitry Korobitsin',
     author_email='korobicin@gmail.com',
-    url='https://github.com/xeemetric/xee-snmp-simulator',
-    packages=['xee_snmp_simulator', 'xee_snmp_simulator.packages'],
+    url='https://github.com/xeemetric/snmp-simulator',
+    packages=['snmp_simulator', 'snmp_simulator.packages'],
     install_requires=['pysnmp==4.2.5'],
     entry_points={
         'console_scripts': [
-            'simulator = xee_snmp_simulator.simulator:main',
+            'snmp-simulator = snmp_simulator.simulator:main',
         ],
     },
     platforms=['Any'],

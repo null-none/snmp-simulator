@@ -11,7 +11,7 @@ import asyncore
 import time
 import os
 from pysnmp.entity.rfc3413.oneliner import cmdgen
-from xee_snmp_simulator import Simulator
+from snmp_simulator import Simulator
 
 
 WALK_FILE = os.path.abspath(os.path.join(os.path.dirname(__file__), 'cisco_2801.walk'))

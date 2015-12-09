@@ -5,3 +5,4 @@ Dockerfile
 *.egg-info
 dist
 log
+venv

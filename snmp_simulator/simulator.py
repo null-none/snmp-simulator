@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 """
-    xee_snmp_simulator.simulator
+    snmp_simulator.simulator
     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     SNMP Simulator
     :copyright: (c) 2014-2015 Dmitry Korobitsin <https://github.com/korobitsin>
@@ -17,7 +17,7 @@ from pysnmp.carrier.asynsock.dgram import udp
 from pysnmp.proto.api import v2c
 from pysnmp.proto import rfc1902
 
-from xee_snmp_simulator.packages.lib_config import getConfig
+from snmp_simulator.packages.lib_config import getConfig
 
 log = logging.getLogger('simulator')
 conf = getConfig('simulator')

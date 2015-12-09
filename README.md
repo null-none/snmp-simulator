@@ -1,6 +1,6 @@
-# xee-snmp-simulator [![Circle CI](https://circleci.com/gh/xeemetric/xee-snmp-simulator/tree/master.svg?style=svg)](https://circleci.com/gh/xeemetric/xee-snmp-simulator/tree/master)
+# snmp-simulator [![Circle CI](https://circleci.com/gh/xeemetric/snmp-simulator/tree/master.svg?style=svg)](https://circleci.com/gh/xeemetric/snmp-simulator/tree/master)
 
-SNMP Simulator is a simple tool to simulate an SNMP agent based on its SNMP walk file.
+A simple SNMP Simulator driven by agent\'s snmpwalk.
 
 
 ## Docker deployment
@@ -9,11 +9,11 @@ SNMP Simulator is a simple tool to simulate an SNMP agent based on its SNMP walk
 
 Assuming you are running Docker on Linux/x86-64.
 
-    $ docker run -p 161:161/udp xeemetric/xee-snmp-simulator
+    $ docker run -p 161:161/udp xeemetric/snmp-simulator
 
 With custom walk file:
 
-    $ docker run -p 161:161/udp -v /custom.walk:/cisco_2801.walk xeemetric/xee-snmp-simulator
+    $ docker run -p 161:161/udp -v /custom.walk:/cisco_2801.walk xeemetric/snmp-simulator
 
 
 ## Conventional deployment
@@ -23,8 +23,8 @@ With custom walk file:
 Assuming you are running Ubuntu 15.04.
 
     $ sudo apt-get update && apt-get install python-pip
-    $ sudo pip install xee-snmp-simulator
-    $ sudo simulator -s --walk_file <walk_file>
+    $ sudo pip install snmp-simulator
+    $ sudo snmp-simulator -s --walk_file <walk_file>
 
 
 ## Creating a walk file
