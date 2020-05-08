@@ -150,7 +150,7 @@ class Config(object):
         import optparse
         parser = optparse.OptionParser(usage='usage: %prog [options]')
 
-        for option in self._options.itervalues():
+        for option in self._options.values():
             args = ['--%s' % option.name]
             kwargs = dict(action='store', type='string', dest=option.name, help=option.description)
             if option.shortcut:
@@ -164,7 +164,7 @@ class Config(object):
             parser.add_option(*args, **kwargs)
 
         cli_options, args = parser.parse_args()
-        for option in self._options.itervalues():
+        for option in self._options.values():
             cli_value = getattr(cli_options, option.name)
             if option.otype == list:
                 cli_value = _string_list(cli_value)
@@ -205,7 +205,7 @@ class Config(object):
 
     def _verify_options(self):
         valid = True
-        for option in self._options.itervalues():
+        for option in self._options.values():
             valid &= option.validate()
         self.dump_config and self._dump_config()
         if not valid:
@@ -213,7 +213,7 @@ class Config(object):
             sys.exit(1)
 
     def _dump_config(self):
-        for option in self._options.itervalues():
+        for option in self._options.values():
             sys.stderr.write('%s' % option)
         sys.exit(0)
 
