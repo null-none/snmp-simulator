@@ -326,7 +326,7 @@ class PidFile(object):
         try:
             os.unlink(self.filename)
             log.debug('Pid file removed: "%s"' % self.filename)
-        except OSError, e:
+        except OSError as e:
             log.exception('Cannot remove pid file: %s' % str(e))
 
 
