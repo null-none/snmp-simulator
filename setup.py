@@ -8,7 +8,7 @@ setup(
     author_email='korobicin@gmail.com',
     url='https://github.com/xeemetric/snmp-simulator',
     packages=['snmp_simulator', 'snmp_simulator.packages'],
-    install_requires=['pysnmp==4.2.5'],
+    install_requires=['pysnmp==4.4.12'],
     entry_points={
         'console_scripts': [
             'snmp-simulator = snmp_simulator.simulator:main',
