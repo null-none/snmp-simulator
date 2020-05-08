@@ -134,7 +134,7 @@ class Config(object):
         try:
             os.utime(self._pidfile.filename, None)
             log.debug('Pid file touched: "%s"' % self._pidfile.filename)
-        except Exception, e:
+        except Exception as e:
             log.exception('Cannot touch the pid file: %s' % str(e))
 
     def remove_pid_file(self):
@@ -178,7 +178,7 @@ class Config(object):
         parser = ConfigParser.RawConfigParser()
         try:
             parser.readfp(codecs.open(self.config_file, 'r', 'utf-8'))
-        except IOError, e:
+        except IOError as e:
             sys.stderr.write('Cannot open config file: %s\n' % e)
             sys.exit(1)
 
