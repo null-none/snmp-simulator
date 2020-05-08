@@ -1,4 +1,5 @@
-# -*- coding: utf-8 -*-
+from __future__ import absolute_import
+
 """
     xee_snmp_simulator
     ~~~~~~~~~~~~~~~~~~
@@ -7,4 +8,4 @@
     :license: BSD, see LICENSE
 """
 
-from simulator import Simulator
+from .simulator import Simulator
