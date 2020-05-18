@@ -9,18 +9,18 @@ A simple SNMP Simulator driven by agent\'s snmpwalk.
 
 Assuming you are running Docker on Linux/x86-64.
 
-    $ docker run -p 161:161/udp xeemetric/snmp-simulator
+    $ docker run -p 161:161/udp kal1sha/snmp-simulator
 
 With custom walk file:
 
-    $ docker run -p 161:161/udp -v /custom.walk:/cisco_2801.walk xeemetric/snmp-simulator
+    $ docker run -p 161:161/udp -v /custom.walk:/cisco_2801.walk kal1sha/snmp-simulator
 
 
 ## Conventional deployment
 
 > You need root to use the default `udp/161`
 
-Assuming you are running Ubuntu 15.04.
+Assuming you are running Ubuntu 20.04.
 
     $ sudo apt-get update && apt-get install python-pip
     $ sudo pip install snmp-simulator
